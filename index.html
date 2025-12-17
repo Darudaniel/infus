@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="es">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>INFUS</title>
+  <link rel="stylesheet" href="css/styles.css" />
+</head>
+<body>
+
+<header class="app-header">
+  <h1>INFUS</h1>
+  <p class="subtle">From dose to pump — without cognitive friction.</p>
+</header>
+
+<main class="grid">
+
+  <section class="card">
+
+    <h2>Calculadora de infusión</h2>
+
+    <div class="row">
+      <label>Fármaco
+        <select id="drugSelect"></select>
+      </label>
+
+      <label>Peso (kg)
+        <input id="weightKg" type="number" value="80" step="0.1" />
+      </label>
+
+      <div></div>
+    </div>
+
+    <h3>Preparación</h3>
+    <div class="row">
+      <label>Cantidad
+        <input id="prepAmount" type="number" />
+      </label>
+
+      <label>Unidad
+        <select id="prepUnit"></select>
+      </label>
+
+      <label>Volumen total (mL)
+        <input id="prepVol" type="number" />
+      </label>
+    </div>
+
+    <div class="result">
+      <div class="subtle">Concentración</div>
+      <div class="big" id="concOut">—</div>
+    </div>
+
+    <h3>Objetivo (dosis → bomba)</h3>
+    <label>Dosis objetivo (mcg/kg/min)</label>
+    <input id="doseTarget" type="number" value="0.1" step="0.01" />
+
+    <div class="result">
+      <div class="big" id="orderMainOut">—</div>
+      <div class="subtle" id="orderEquivOut">—</div>
+    </div>
+
+    <h3>Bomba actual (bomba → dosis real)</h3>
+    <div class="row">
+      <label>Velocidad actual
+        <input id="pumpValue" type="number" value="6" step="0.01" />
+      </label>
+
+      <label>Unidad
+        <select id="pumpUnit">
+          <option value="ml_h">mL/h</option>
+          <option value="ml_min">mL/min</option>
+          <option value="mcg_min">mcg/min</option>
+        </select>
+      </label>
+
+      <div></div>
+    </div>
+
+    <div class="result">
+      <div class="big" id="verifyMainOut">—</div>
+      <div class="subtle" id="verifyEquivOut">—</div>
+    </div>
+
+  </section>
+
+  <aside class="card">
+    <h2>Tarjeta clínica</h2>
+    <div id="drugSummary"></div>
+    <div id="doseRanges" class="mono"></div>
+    <div id="prepExample" class="mono"></div>
+    <div id="alerts"></div>
+  </aside>
+
+</main>
+
+<script type="module" src="js/infus-ui.js"></script>
+</body>
+</html>
