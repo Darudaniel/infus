@@ -52,8 +52,9 @@
     </div>
 
     <h3>Objetivo (dosis → bomba)</h3>
-    <label>Dosis objetivo (mcg/kg/min)</label>
+    <label id="doseTargetLabel">Dosis objetivo</label>
     <input id="doseTarget" type="number" value="0.1" step="0.01" />
+    <div class="subtle" id="doseTargetHint">—</div>
 
     <div class="result">
       <div class="big" id="orderMainOut">—</div>
@@ -70,7 +71,7 @@
         <select id="pumpUnit">
           <option value="ml_h">mL/h</option>
           <option value="ml_min">mL/min</option>
-          <option value="mcg_min">mcg/min</option>
+          <option value="unit_min">unidades/min</option>
         </select>
       </label>
 
