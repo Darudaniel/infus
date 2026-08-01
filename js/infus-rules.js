@@ -61,6 +61,54 @@ export const DRUGS = {
   },
 
   /* ======================
+     VASODILATADORES
+     ====================== */
+
+  nitroglycerin: {
+    label: "Nitroglicerina",
+    unitsAllowed: ["mg","mcg"],
+    baseUnit: "mcg",
+    weightBased: false,
+    doseUnit: "mcg/min",
+    summary: "Vasodilatador venoso y coronario. Titular según respuesta clínica y hemodinámica.",
+    defaultDose: 5,
+    doseRange: { low: 5, mid: 20, high: 200 },
+    defaultPreparation: { amount: 50, unit: "mg", volumeMl: 250 },
+    access: null,
+    warnings: [
+      { severity: "warn", when: ({dose}) => dose >= 200, text: "Dosis elevada: vigilar estrechamente hipotensión y respuesta hemodinámica." },
+      { severity: "high", when: () => true, text: "Contraindicada con inhibidores de PDE-5 (p. ej., sildenafil, tadalafil o vardenafil) y riociguat por riesgo de hipotensión grave." },
+      { severity: "info", when: () => true, text: "Administrar con bomba y equipo de infusión no adsorbente; monitorizar presión arterial y frecuencia cardiaca." }
+    ],
+    clinicalNotes: [
+      "Inicio habitual: 5 mcg/min; aumentar 5 mcg/min cada 3–5 min hasta 20 mcg/min y luego en incrementos de 10–20 mcg/min según respuesta."
+    ]
+  },
+
+  sodiumNitroprusside: {
+    label: "Nitroprusiato de sodio",
+    unitsAllowed: ["mg","mcg"],
+    baseUnit: "mcg",
+    weightBased: true,
+    doseUnit: "mcg/kg/min",
+    summary: "Vasodilatador arterial y venoso de acción rápida para control hemodinámico estrecho.",
+    defaultDose: 0.3,
+    doseRange: { low: 0.3, mid: 3, high: 10 },
+    defaultPreparation: { amount: 50, unit: "mg", volumeMl: 250 },
+    access: null,
+    warnings: [
+      { severity: "high", when: ({dose}) => dose >= 10, text: "Máximo recomendado: 10 mcg/kg/min. No mantener esta velocidad por más de 10 minutos; suspender si no se logra control." },
+      { severity: "warn", when: ({dose}) => dose >= 3, text: "Dosis altas o prolongadas aumentan el riesgo de toxicidad por cianuro y tiocianato." },
+      { severity: "high", when: () => true, text: "Requiere monitorización continua de presión arterial y administración mediante bomba volumétrica." },
+      { severity: "info", when: () => true, text: "Proteger la solución de la luz; no usar si presenta color azul, verde o rojo, ni si contiene partículas." }
+    ],
+    clinicalNotes: [
+      "Inicio: 0.3 mcg/kg/min; titular cada pocos minutos según respuesta.",
+      "Si eGFR < 30 mL/min/1.73 m², limitar la velocidad media a < 3 mcg/kg/min; en anuria, a 1 mcg/kg/min."
+    ]
+  },
+
+  /* ======================
      SEDANTES / ANALGÉSICOS
      ====================== */
 

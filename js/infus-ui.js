@@ -49,6 +49,7 @@ function syncDrug(){
   // Ajuste de step por defecto (solo UX)
   $("doseTarget").step = drug.baseUnit === "mUI" ? "1" : "0.01";
   if (drug.baseUnit === "mUI" && Number($("doseTarget").value) < 1) $("doseTarget").value = "20";
+  if (Number.isFinite(drug.defaultDose)) $("doseTarget").value = String(drug.defaultDose);
 }
 
 function addAlert(severity, text){
