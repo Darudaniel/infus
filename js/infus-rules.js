@@ -17,6 +17,41 @@ export const DRUGS = {
     warnings: []
   },
 
+  vasopressin: {
+    label: "Vasopresina",
+    unitsAllowed: ["UI"],
+    baseUnit: "mUI",
+    weightBased: false,
+    doseUnit: "UI/min",
+    doseToBaseFactor: 1000,
+    doseStep: 0.005,
+    defaultDose: 0.03,
+    summary: "Vasopresor no catecolaminérgico. Coadyuvante de norepinefrina en shock séptico; no es de primera línea.",
+    doseRange: { low: 0.01, mid: 0.03, high: 0.07 },
+    defaultPreparation: { amount: 20, unit: "UI", volumeMl: 100 },
+    access: null,
+    warnings: [
+      { severity: "high", when: ({dose}) => dose > 0.07, text: "Dosis > 0.07 UI/min: datos clínicos limitados en shock séptico y mayor riesgo de reacciones adversas." },
+      { severity: "warn", when: ({dose}) => dose > 0.03 && dose <= 0.07, text: "Supera la dosis fija habitual de 0.03 UI/min en sepsis. Titular solo si el protocolo institucional adopta la ficha técnica." },
+      { severity: "high", when: () => true, text: "Medicamento de alto riesgo: verificar presentación, concentración, bomba y velocidad de forma independiente." },
+      { severity: "info", when: () => true, text: "Monitorizar presión arterial, ritmo y gasto cardiaco, perfusión distal/abdominal, sodio, balance hídrico y diuresis." },
+      { severity: "info", when: () => true, text: "Tras suspenderla, vigilar poliuria, orina diluida e hipernatremia por posible diabetes insípida reversible." }
+    ],
+    clinicalNotes: [
+      "SSC 2026: agregar a norepinefrina cuando se requieran dosis crecientes para alcanzar la PAM objetivo; norepinefrina sigue siendo primera línea.",
+      "Esquema habitual en sepsis: 0.03 UI/min (1.8 UI/h) en infusión continua a dosis fija.",
+      "Ficha técnica: iniciar 0.01 UI/min y aumentar 0.005 UI/min cada 10–15 min; datos limitados por encima de 0.07 UI/min.",
+      "La presentación concentrada de 20 UI/mL requiere dilución; no volver a diluir las presentaciones premezcladas. Validar siempre el producto disponible.",
+      "Paro cardiaco: no sustituye a la epinefrina; AHA 2025 no encuentra ventaja con vasopresina sola o combinada."
+    ],
+    references: [
+      { label: "Surviving Sepsis Campaign 2026", url: "https://sccm.org/clinical-resources/guidelines/guidelines/surviving-sepsis-campaign-international-guidelines-for-management-of-sepsis-and-septic-shock-2026" },
+      { label: "DailyMed — ficha técnica oficial", url: "https://dailymed.nlm.nih.gov/dailymed/drugInfo.cfm?setid=50aef1e8-0a70-466d-93cd-c1b9ed489839" },
+      { label: "Drugs.com — monografía profesional", url: "https://www.drugs.com/monograph/vasopressin.html" },
+      { label: "AHA 2025 — RCP y atención cardiovascular de emergencia", url: "https://www.heart.org/-/media/CPR-Files/2025-documents-for-cpr-heart-edits-posting/Resuscitation-Science/252500_Hghlghts_2025ECCGuidelines.pdf" }
+    ]
+  },
+
   epinephrine: {
     label: "Adrenalina",
     unitsAllowed: ["mg","mcg"],

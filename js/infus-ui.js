@@ -47,8 +47,10 @@ function syncDrug(){
     : "Se interpreta como dosis directa por minuto (no depende del peso).";
 
   // Ajuste de step por defecto (solo UX)
-  $("doseTarget").step = drug.baseUnit === "mUI" ? "1" : "0.01";
-  if (drug.baseUnit === "mUI" && Number($("doseTarget").value) < 1) $("doseTarget").value = "20";
+  $("doseTarget").step = String(drug.doseStep ?? (drug.baseUnit === "mUI" ? 1 : 0.01));
+  if (!Number.isFinite(drug.defaultDose) && drug.baseUnit === "mUI" && Number($("doseTarget").value) < 1) {
+    $("doseTarget").value = "20";
+  }
   if (Number.isFinite(drug.defaultDose)) $("doseTarget").value = String(drug.defaultDose);
 }
 
@@ -79,6 +81,32 @@ function renderDrugWarnings(dose, drug){
   });
 }
 
+function renderDrugReferences(drug){
+  if(!Array.isArray(drug.references) || drug.references.length === 0) return;
+
+  const section = document.createElement("div");
+  section.className = "drug-references";
+
+  const title = document.createElement("strong");
+  title.textContent = "Fuentes clínicas";
+  section.appendChild(title);
+
+  const list = document.createElement("ul");
+  drug.references.forEach(reference => {
+    const item = document.createElement("li");
+    const link = document.createElement("a");
+    link.href = reference.url;
+    link.textContent = reference.label;
+    link.target = "_blank";
+    link.rel = "noopener noreferrer";
+    item.appendChild(link);
+    list.appendChild(item);
+  });
+
+  section.appendChild(list);
+  $("alerts").appendChild(section);
+}
+
 function recalc(){
   const drug = DRUGS[$("drugSelect").value];
   const weight = num("weightKg");
@@ -93,7 +121,8 @@ function recalc(){
 
   // Objetivo -> bomba
   const doseTarget = num("doseTarget"); // (mcg/kg/min) o (mUI/min)
-  const targetBaseMin = calc.targetBasePerMin(doseTarget, weight, !!drug.weightBased);
+  const doseToBaseFactor = drug.doseToBaseFactor ?? 1;
+  const targetBaseMin = calc.targetBasePerMin(doseTarget * doseToBaseFactor, weight, !!drug.weightBased);
   const flowMlMin = calc.basePerMinToFlowMlMin(targetBaseMin, concBase);
   const flowMlH = (flowMlMin != null) ? flowMlMin * 60 : null;
 
@@ -109,13 +138,20 @@ function recalc(){
   const pumpValue = num("pumpValue");
   const pumpUnit = $("pumpUnit").value;
 
-  const actualBaseMin = calc.pumpToBasePerMin(pumpValue, pumpUnit, concBase);
+  const actualBaseMin = calc.pumpToBasePerMin(
+    pumpUnit === "unit_min" ? pumpValue * doseToBaseFactor : pumpValue,
+    pumpUnit,
+    concBase
+  );
 
   let doseActual = null;
   if(actualBaseMin != null){
-    doseActual = drug.weightBased
+    const actualDoseInBaseUnits = drug.weightBased
       ? (weight > 0 ? actualBaseMin / weight : null)     // base/kg/min
       : actualBaseMin;                                   // base/min
+    doseActual = actualDoseInBaseUnits == null
+      ? null
+      : actualDoseInBaseUnits / doseToBaseFactor;
   }
 
   $("verifyMainOut").textContent =
@@ -145,6 +181,8 @@ function recalc(){
   if(Array.isArray(drug.clinicalNotes)){
     drug.clinicalNotes.forEach(t => addAlert("info", t));
   }
+
+  renderDrugReferences(drug);
 }
 
 function bindEvents(){
